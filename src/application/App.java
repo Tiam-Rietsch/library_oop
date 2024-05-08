@@ -11,13 +11,15 @@ import view.View;
 public class App {
     private static Scanner in = new Scanner(System.in);
     private static String command;
+
+
     
     public static void main(String[] args) throws Exception {
         String[] list = {"hello", "world"};
 
         // this is a test table to test if the View class is working
         LinkedHashMap<String, ArrayList<String>> table = new LinkedHashMap<>() {{
-            put("columnA", new ArrayList(Arrays.asList("cellA1", "cellA2", "cellA3")));
+            put("ID", new ArrayList(Arrays.asList("1", "2", "3")));
             put("columnB", new ArrayList(Arrays.asList("cellB1", "cellB2", "cellB3")));
             put("columnC", new ArrayList(Arrays.asList("cellC1", "cellC2", "cellC3")));
             put("columnD", new ArrayList(Arrays.asList("cellD1", "cellD2", "cellD3")));
@@ -27,9 +29,9 @@ public class App {
         do {
             // display the fake table
             View.displayTable("test table", table);
-            command = in.nextLine();
-            if (command.equals("exit")) {
-                return;
+            ArrayList<String> cmd = View.readCommand();
+            for (String c : cmd) {
+                System.out.println(c + ".");
             }
         } while (true);
     }

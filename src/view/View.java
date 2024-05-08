@@ -1,6 +1,7 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
@@ -122,6 +123,14 @@ public class View {
         return line += "+";
     }
 
+    private static ArrayList<String> cleanCommand(ArrayList<String> command) {
+        ArrayList<String> finalCmd = new ArrayList<>();
+        for (String arg : command) {
+            if (!arg.isEmpty()) finalCmd.add(arg);
+        }
+        return finalCmd;
+    }
+
     /**
      * this method can be used to display a fully formated table on screen.
      * it makes use of the private utility methods to print out header, rows and lines
@@ -162,6 +171,17 @@ public class View {
         return input;
     }
 
-    
+    public static ArrayList<String> readCommand() {
+        String input;
+        ArrayList<String> cmd;
+
+        // get input from screen and split command argument into an array
+        System.out.print("/n$ ");
+        input = scanner.nextLine();
+        cmd = new ArrayList<>(Arrays.asList(input.split(" ")));
+
+        // returns the cleaned array by eliminating white spaces
+        return cleanCommand(cmd);
+    }
 
 }
