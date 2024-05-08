@@ -176,7 +176,7 @@ public class View {
         ArrayList<String> cmd;
 
         // get input from screen and split command argument into an array
-        System.out.print("/n$ ");
+        System.out.print("\n$ ");
         input = scanner.nextLine();
         cmd = new ArrayList<>(Arrays.asList(input.split(" ")));
 
