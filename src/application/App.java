@@ -63,7 +63,6 @@ public class App {
      *                 the required controler name
      * @return true if executed properly otherwise return false
      */
-
     private static boolean launchControllerSelection(ArrayList<String> commands) {
         TableController controller = getController(commands.get(1));
         if (commands.size() > 2 && commands.get(2).toUpperCase().equals("-ALL")) {
