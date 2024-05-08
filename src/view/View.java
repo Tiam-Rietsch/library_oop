@@ -163,8 +163,8 @@ public class View {
         String output = "\t# " + inputName;
         String input = "";
 
-        output += defaultValue.isBlank() ? "" : " ~ " + defaultValue;
-        output += helperText.isBlank() ? "" : "(" + helperText + ")";
+        output += defaultValue.equals("") ? "" : " ~ " + defaultValue;
+        output += helperText.equals("") ? "" : "(" + helperText + ")";
         System.out.print(output + ": ");
 
         input = scanner.nextLine();

@@ -2,6 +2,7 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar"
+        "lib/**/*.jar",
+        "/home/tiam/external-jars/sqlite-jdbc-3.7.2.jar"
     ]
 }

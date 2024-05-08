@@ -9,6 +9,12 @@ import controller.TableController;
 import view.View;
 
 public class App {
+    /**
+     * This method is used to get the appropriate controller class 
+     * needed to execute the user command
+     * @param tableName
+     * @return a TableController can be either Aherant or Document controller
+     */
     private static TableController getController(String tableName) {
         switch (tableName.toUpperCase()) {
             case "ADHERANT":
@@ -18,20 +24,45 @@ public class App {
         }
     }
 
+    /**
+     * This method is used to launch the controller creation method
+     * @param commands this list of commands useful because we still need the name of the
+     *                 controller to be used
+     * @return  return true if executed properly, otherwise return false
+     */
     private static boolean launchControllerCreation(ArrayList<String> commands) {
         TableController controller = getController(commands.get(1));
         return controller.create();
     }
 
+    /**
+     * This is method is used to launch the controllers deletion method 
+     * @param commands we need the list off command because we need to extract
+     *                 the required controler name
+     * @return true if executed properly otherwise return false
+     */
     private static boolean launchControllerDeletion(ArrayList<String> commands) {
         TableController controller = getController(commands.get(1));
         return controller.delete();
     }
+    /**
+     * This is method is used to launch the controllers update method 
+     * @param commands we need the list off command because we need to extract
+     *                 the required controler name
+     * @return true if executed properly otherwise return false
+     */
 
     private static boolean launchControllerUpdate(ArrayList<String> commands) {
         TableController controller = getController(commands.get(1));
         return controller.update();
     }
+
+    /**
+     * This is method is used to launch the controllers selection method 
+     * @param commands we need the list off command because we need to extract
+     *                 the required controler name
+     * @return true if executed properly otherwise return false
+     */
 
     private static boolean launchControllerSelection(ArrayList<String> commands) {
         TableController controller = getController(commands.get(1));
@@ -42,12 +73,22 @@ public class App {
         }
     }
 
+    /**
+     * This method whipes out the entire console
+     * @return true if executed properly otherwise return false
+     */
     private static boolean clearScreen() {
         System.out.print("H\033[H\033[2J");
         System.out.flush();
         return true;
     }
 
+    /**
+     * Interprets the command by analysing the various arguments and
+     * call the adequate controller
+     * @param commands  array of Strings making up the entire user command
+     * @return true if command execution was completed properly and false otherwise
+     */
     private static boolean interpreteCommand(ArrayList<String> commands) {
         String firstWord = commands.get(0);
         switch (firstWord.toUpperCase()) {
@@ -73,18 +114,7 @@ public class App {
         boolean loop = true;
         ArrayList<String> cmd;
 
-        // this is a test table to test if the View class is working
-        // LinkedHashMap<String, ArrayList<String>> table = new LinkedHashMap<>() {{
-        //     put("ID", new ArrayList(Arrays.asList("1", "2", "3")));
-        //     put("columnB", new ArrayList(Arrays.asList("cellB1", "cellB2", "cellB3")));
-        //     put("columnC", new ArrayList(Arrays.asList("cellC1", "cellC2", "cellC3")));
-        //     put("columnD", new ArrayList(Arrays.asList("cellD1", "cellD2", "cellD3")));
-        //     put("columnE", new ArrayList(Arrays.asList("cellE1", "cellE2", "cellE3")));
-        //     put("columnF", new ArrayList(Arrays.asList("cellF1", "cellF2", "cellF3")));
-        // }};
         do {
-            // display the fake table
-            // View.displayTable("test table", table);
             cmd = View.readCommand();
             loop = interpreteCommand(cmd);
         } while (loop);
