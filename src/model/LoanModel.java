@@ -176,6 +176,67 @@ public class LoanModel extends TableModel {
         return result;
     }   
 
+    public boolean insert(LinkedHashMap<String, String> attrtibutes) {
+        String adherantID = attrtibutes.get("adherant_id");
+        String documentID = attrtibutes.get("document_id");
+        try {
+            Connection conn = getConnection();
+            statement = conn.createStatement();
+
+            resultSet = statement.executeQuery("SELECT * FROM Loan WHERE status='active';");
+
+            System.out.println(resultSet.next());
+            while (resultSet.next()) {
+                if (resultSet.getString("adherant_id").equals(adherantID) &&
+                    resultSet.getString("document_id").equals(documentID)) {
+                        System.out.println("Adherant Already borrowed this book");
+                        return true;        
+                }
+            }
+
+            resultSet = statement.executeQuery("SELECT * FROM Document WHERE id="+documentID+";");
+            int n_copies = 0;
+            int n_borrow = 0;
+            int copies_left;
+            while (resultSet.next()) {
+                n_copies = Integer.parseInt(resultSet.getString("nbr_copies"));
+                n_borrow = Integer.parseInt(resultSet.getString("nbr_borrow"));
+            }
+            n_borrow+= 1;
+            copies_left = n_copies - n_borrow;
+
+            if (copies_left < 0) {
+                System.out.println("There are no more copies of this document");
+                return true;
+            }
+
+            statement.execute("UPDATE DOCUMENT SET copies_left="+copies_left+", nbr_borrow="+n_borrow+ " WHERE id="+attrtibutes.get("document_id")+";");
+
+            conn.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return super.insert(attrtibutes);
+    }
+
+    public boolean returnDocument(String adherantID, String documentID) {
+        String query = "UPDATE DOCUMENT SET status='returned' WHERE id="+adherantID+" AND document_id="+documentID+" AND status='active';";
+
+        try {
+            Connection conn = getConnection();
+            statement = conn.createStatement();
+            statement.execute(query);
+
+            conn.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     public LinkedHashMap<String, ArrayList<String>> selectLate(LinkedHashMap<String, String> attributes) {
         LinkedHashMap<String, ArrayList<String>> generalTable = select(attributes);
         return filterLateRows(generalTable);

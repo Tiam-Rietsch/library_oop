@@ -1,4 +1,6 @@
 package controller;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import model.AdherantModel;
@@ -19,6 +21,7 @@ public class AdherantController extends TableController {
 
     public boolean create() {
         LinkedHashMap<String, String> attributes = model.getAllAttributes();
+        String value;
 
         // iterate through all the attributes of the model and promt the user for their values
         for (String attr : model.getAllAttributes().sequencedKeySet()) {
@@ -36,9 +39,12 @@ public class AdherantController extends TableController {
                     attributes.put("max_loan", "4");
                 }
                 continue;
-            } 
+            } else if (attr.equals("address")) {
+                value = View.collectCompositeInput("address", new ArrayList<>(Arrays.asList("quater", "town", "country")));
+            } else {
+                value = View.collectUserInput(attr, "", "");
+            }
             
-            String value = View.collectUserInput(attr, "", "");
 
             if (value.equals(".")) {
                 break;

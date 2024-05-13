@@ -171,6 +171,19 @@ public class View {
         return input.isBlank() ? defaultValue : input;
     }
 
+    public static String collectCompositeInput(String title, ArrayList<String> components) {
+        String input = "";
+
+        System.out.print("\t" + title + "\n");
+        for (String c : components) {
+            System.out.print("\t\t> " + c + ": ");
+            String val = scanner.nextLine();
+            input += components.getLast().equals(c) ? val : val + "/";
+        }
+
+        return input;
+    }
+
     public static ArrayList<String> readCommand() {
         String input;
         ArrayList<String> cmd;

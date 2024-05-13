@@ -90,9 +90,17 @@ public class App {
      * @return true if executed properly otherwise return false
      */
 
-    private static boolean launchControllerUpdate(ArrayList<String> commands) {
+     private static boolean launchControllerUpdate(ArrayList<String> commands) {
         TableController controller  = getController(commands.get(1));
         return controller.update();
+    }
+
+    private static boolean launchControllerReturn(ArrayList<String> commands) {
+        if (commands.size() > 1 && commands.get(1).toUpperCase().equals("DOCUMENT")) {
+            LoanController controller = new LoanController();
+            return controller.returnDocument();
+        }
+        return false;
     }
 
     /**
@@ -148,6 +156,8 @@ public class App {
                 return launchControllerUpdate(commands);
             case "REMOVE":
                 return launchControllerDeletion(commands);
+            case "RETURN":
+                return launchControllerReturn(commands);
             case "CLEAR":
                 return clearScreen();
             default:

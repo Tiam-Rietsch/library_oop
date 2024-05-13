@@ -1,6 +1,8 @@
 package controller;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import model.AdherantModel;
@@ -50,6 +52,7 @@ public class DocumentController extends TableController {
 
     public boolean create() {
         LinkedHashMap<String, String> attributes = model.getAllAttributes();
+        String value;
 
         // iterate through all the attributes of the model and promt the user for their values
         for (String attr : model.getAllAttributes().sequencedKeySet()) {
@@ -63,8 +66,11 @@ public class DocumentController extends TableController {
             } else if (attr.equals("copies_left")) {
                 attributes.put(attr, attributes.get("nbr_copies"));
                 continue;
-            } 
-            String value = View.collectUserInput(attr, "", "");
+            } else if (attr.equals("location")) {
+                value = View.collectCompositeInput("location", new ArrayList<>(Arrays.asList("hall", "shelf")));
+            } else {
+                value = View.collectUserInput(attr, "", "");
+            }
 
             if (value.equals(".")) {
                 break;
