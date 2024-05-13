@@ -108,7 +108,6 @@ public class LoanModel extends TableModel {
     public int getActiveLoanCount(String adherantID) {
         String query = "SELECT Loan.id FROM LOAN INNER JOIN Adherant ON Adherant.id=Loan.adherant_id WHERE Adherant.id=" + adherantID + " AND Loan.status='active'";
 
-        System.out.println(query);
         int count = 0;
         try {
             Connection con = getConnection();
@@ -185,7 +184,6 @@ public class LoanModel extends TableModel {
 
             resultSet = statement.executeQuery("SELECT * FROM Loan WHERE status='active';");
 
-            System.out.println(resultSet.next());
             while (resultSet.next()) {
                 if (resultSet.getString("adherant_id").equals(adherantID) &&
                     resultSet.getString("document_id").equals(documentID)) {

@@ -27,7 +27,6 @@ public class RequestFactory {
             query += key == keys.toArray()[keys.size() - 1] ? " WHERE id=" + id + ";" : ",";
         }
 
-        System.err.println(query);
         return query;
     }
 
@@ -60,7 +59,6 @@ public class RequestFactory {
             }            
         }
 
-        System.out.println(query);
         return query;
     }
 
@@ -92,7 +90,6 @@ public class RequestFactory {
             }            
         }
 
-        System.out.println(query);
         return query;
     }
 
