@@ -8,18 +8,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 public abstract class TableModel {
     // sql utilities
-    private Statement statement;
-    private ResultSet resultSet;
+    protected Statement statement;
+    protected ResultSet resultSet;
 
-    /**
+        /**
      * Creates and sqlite connection to the database
      * @return java.sql.Connection
      */
-    private  Connection getConnection() {
+    protected  Connection getConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
             Connection con = null;
@@ -33,59 +32,6 @@ public abstract class TableModel {
     }
 
     /**
-     * This method assembles an sql select query considering the attributes for the
-     * where clause if necessary
-     * @param attributes attributes to be added to the where clause
-     * @return a String corresponding to the sql command to execute
-     */
-    private String createSelectQuery(LinkedHashMap<String, String> attributes) {
-        String query;
-
-        if (attributes == null || attributes.isEmpty()) {
-            // return full selection if no attributes are given
-            query = "SELECT * FROM " + getTableName() + ";";
-        } else {
-            query = "SELECT * FROM " + getTableName() + " WHERE";
-
-            // iterate through all the attributes and add them into the query
-            Set<String> keys = attributes.keySet();
-            for (String key : keys) {
-                String value = attributes.get(key);
-                query += " " + key + "=" + value;
-                // format the end of the attribute differently if it is the last one or not
-                query += key != keys.toArray()[keys.size() -1] ? " AND" : ";";
-            }            
-        }
-        return query;
-    }
-
-    /**
-     * This method assembles an sql insert query with the various values to insert
-     * @param attributes attributes to be added into the table
-     * @return a String corresponding to the sql command to execute
-     */
-    private String createInsertQuery(LinkedHashMap<String, String> attributes) {
-        String query = "INSERT INTO " + getTableName() + " (";
-
-        // iterate through all the attributes and add them to the query (column names part)
-        Set<String> keys = attributes.keySet();
-        for (String key: keys) {
-            if (key.equals("id")) continue;
-            query += key;
-            // format the end of the attribute differently if it is the last one or not
-            query += key != keys.toArray()[keys.size() -1] ? "," : ") VALUES (";
-        }
-        // iterate through all the attributes and add them to the query (values part)
-        for (String key: keys) {
-            if (key.equals("id")) continue;
-            query += "\'" + attributes.get(key) + "\'";
-            // format the end of the attribute differently if it is the last one or not
-            query += key != keys.toArray()[keys.size() -1] ? "," : ");";
-        }
-        return query;
-    }
-
-    /**
      * This method executes the sql insert query generated from user attributes
      * @param attributes attributes to be added into the query
      * @return true if executed properly and false otherwise
@@ -93,8 +39,54 @@ public abstract class TableModel {
      */
     public boolean insert(LinkedHashMap<String, String> attributes) {
         // retrieve the query for the insertion with all attributes
-        String query = createInsertQuery(attributes);
+        RequestFactory factory = new RequestFactory(getTableName());
+        String query = factory.createInsertQuery(attributes);
 
+        try {
+            Connection conn = getConnection();
+            statement = conn.createStatement();
+            statement.execute(query);
+
+            conn.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    /**
+     * this method executes the sql update query generated from user attributes
+     * @param id the id of the record to be updated
+     * @param attributes the attributes to be updated in the database
+     * @return true if executed properly and false otherwise
+     */
+    public boolean update(String id, LinkedHashMap<String, String> attributes) {
+        // retrieve the query for the insertion with all attributes
+        RequestFactory factory = new RequestFactory(getTableName());
+        String query = factory.createUpdateQuery(id, attributes);
+
+        try {
+            Connection conn = getConnection();
+            statement = conn.createStatement();
+            statement.execute(query);
+
+            conn.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    /**
+     * this method executes the sql delete query generated from user attributes
+     * @param id the id of the record to be updated
+     * @return true if executed properly and false otherwise
+     */
+    public boolean delete(String id) {
+        RequestFactory factory = new RequestFactory(getTableName());
+        String query = factory.createDeleteQuery(id);
         try {
             Connection conn = getConnection();
             statement = conn.createStatement();
@@ -116,7 +108,8 @@ public abstract class TableModel {
      */
     public LinkedHashMap<String, ArrayList<String>> select(LinkedHashMap<String, String> attributes) {
         // retrieve the query for selection with all attributes
-        String query = createSelectQuery(attributes);
+        RequestFactory factory = new RequestFactory(getTableName());
+        String query = factory.createSelectQuery(attributes);
         // this is to store the result of the selection query
         LinkedHashMap<String, ArrayList<String>> result = new LinkedHashMap<>();
 
@@ -150,7 +143,7 @@ public abstract class TableModel {
             e.printStackTrace();
         }
         return result;
-    }
+    }   
 
     public abstract LinkedHashMap<String, String> getAllAttributes();
 

@@ -1,6 +1,5 @@
 package model;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class AdherantModel extends TableModel {
@@ -11,6 +10,7 @@ public class AdherantModel extends TableModel {
             put("surename", "");
             put("address", "");
             put("type", "");
+            put("max_loan", "");
         }};
     }
 

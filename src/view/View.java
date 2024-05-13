@@ -168,7 +168,7 @@ public class View {
         System.out.print(output + ": ");
 
         input = scanner.nextLine();
-        return input;
+        return input.isBlank() ? defaultValue : input;
     }
 
     public static ArrayList<String> readCommand() {

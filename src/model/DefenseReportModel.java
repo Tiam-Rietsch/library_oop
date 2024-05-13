@@ -1,0 +1,20 @@
+package model;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+public class DefenseReportModel extends DocumentModel {
+    public LinkedHashMap<String, String> getAllAttributes() {
+        LinkedHashMap<String, String> attributes = super.getAllAttributes();
+        attributes.putAll(new LinkedHashMap<>() {{
+            put("type", "report");
+            put("defense_date", "");
+        }});
+        return attributes;
+    }
+
+    public LinkedHashMap<String, ArrayList<String>> select(LinkedHashMap<String, String> attributes) {
+        LinkedHashMap<String, ArrayList<String>> generalTable = super.select(attributes);
+        return filterRows(filterColumns(generalTable));
+   }
+}
