@@ -6,27 +6,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
-/*
- * The view is where all the display happen 
- * > collection of user inputs [DONE]
- *      - for the collection of user inputs there are specific functions that just retreive what
- *        the user has typed on the screen and return the value
- *      - there are alse special retrieve functions that can also withdraw composite values
- * > display of tables [DONE]
- *      - when we talk about display of tables we have to handle the formatting of table
- *        column width with respect to the maximum width of a character on the table
- *      - so therefore there is a specific function responsible for counting the maximum with for 
- *        every column, does so by comparing all the string's character length and takes the biggest
- *      - there is also a function responsible for creating table columns boundary with "--" taking the 
- *        totoal column width into consideration
- * > display of errors
- *      - when there is an error there is a function that should be able to alert the user properly 
- * > display of help
- *      - there are specific commands that the user must be able to type to obtain help menus and functions
- *        while he/she is using the application.
- */
-
-
 public class View {
     private static Scanner scanner = new Scanner(System.in);
 
@@ -35,6 +14,10 @@ public class View {
      * @param table
      */
     private static void drawTableHeader(HashMap<String, ArrayList<String>> table) {
+    	if (table.isEmpty()) {
+    		System.out.print("the table is empty");
+    		return;
+    	}
         // first display the row boundary ("|")
         System.out.print("|");
     
@@ -53,7 +36,7 @@ public class View {
     private static void drawTableRows(HashMap<String, ArrayList<String>> table) {
         int i = 0;
         do {
-            // first get the set of table headers and check if the boundary has exeeded
+            // first get the set of table headers and check if the boundary has exceeded
             Set<String> headers = table.keySet();
             if (i >= table.get(headers.toArray()[0]).size()) break;
 
@@ -101,6 +84,7 @@ public class View {
      */
     private static String createFormatString(String header, ArrayList<String> column) {
         String format = "";
+
         format += " %-" + Integer.toString(getColumnWidth(header, column)) + "s |";
         return format;
     }
@@ -139,6 +123,10 @@ public class View {
      * @param table the table hashmap
      */
     public static void displayTable(String title, HashMap<String, ArrayList<String>> table) {
+    	if (table.isEmpty()) {
+    		System.out.print("the table is empty");
+    		return;
+    	}
         String line = drawLineWidth(table);
         System.out.printf("%s \n", title.toUpperCase());
 
@@ -150,6 +138,13 @@ public class View {
         // draw rows
         drawTableRows(table);
         System.out.printf("%s \n", line);
+    }
+
+    public static void displayError(String error) {
+        String RED = "\u001B[31m";
+        String RESET = "\u001B[0m";
+
+        System.out.println("\t" + RED + error + RESET);
     }
 
     /**

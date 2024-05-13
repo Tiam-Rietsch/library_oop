@@ -8,16 +8,13 @@ import controller.AdherantController;
 import controller.TableController;
 import controller.LoanController;
 import controller.DocumentController;
-import model.AdherantModel;
-import model.ArticleModel;
-import model.BookModel;
-import model.DefenseReportModel;
-import model.DocumentModel;
-import model.MagazineModel;
-import model.TableModel;
 import view.View;
 
 public class App {
+
+    /**
+     * returns the controller of the corresponding the the input command
+     */
     private static TableController getController(String tableName) {
         switch (tableName.toUpperCase()) {
             case "ADHERANT":
@@ -30,37 +27,6 @@ public class App {
                 return null;
         }
     }
-
-    /**
-     * This method is used to get the appropriate model class 
-     * needed to execute the user command
-     * @param tableName
-     * @return a TableModel can be either Aherant or Document model
-     */
-    // private static TableModel getModel(String tableName) {
-    //     switch (tableName.toUpperCase()) {
-    //         case "ADHERANT":
-    //             return new AdherantModel();
-    //         case "DOCUMENT":
-    //             String documentType = View.collectUserInput("type", "every", "");
-    //             switch (documentType.toUpperCase()) {
-    //                 case "BOOK":
-    //                     return new BookModel();
-    //                 case "ARTICLE":
-    //                     return new ArticleModel();
-    //                 case "REPORT":
-    //                     return new DefenseReportModel();
-    //                 case "MAGAZINE":
-    //                     return new MagazineModel();
-    //                 case "EVERY":
-    //                     return new DocumentModel();
-    //                 default:
-    //                     return null;
-    //             }
-    //         default:
-    //             return null;
-    //     }
-    // }
 
     /**
      * This method is used to launch the controller creation method
@@ -83,13 +49,13 @@ public class App {
         TableController controller  = getController(commands.get(1));
         return controller.delete();
     }
+
     /**
      * This is method is used to launch the controllers update method 
      * @param commands we need the list off command because we need to extract
      *                 the required controler name
      * @return true if executed properly otherwise return false
      */
-
      private static boolean launchControllerUpdate(ArrayList<String> commands) {
         TableController controller  = getController(commands.get(1));
         return controller.update();
@@ -111,6 +77,8 @@ public class App {
      */
     private static boolean launchControllerSelection(ArrayList<String> commands) {
         TableController controller  = getController(commands.get(1));
+
+        // launch special controllers depending the the end arguments
         if (commands.size() > 2 && commands.getLast().toUpperCase().equals("-ALL")) {
             return controller.selectAll();
         } else if (commands.size() > 2 && commands.getLast().toUpperCase().equals("-LATE")) {
@@ -119,8 +87,6 @@ public class App {
         } else if (commands.size() > 2 && commands.getLast().toUpperCase().equals("-ACTIVE")) {
             return ((LoanController) controller).selectActive();
         } else if (commands.size() > 2 && commands.getLast().toUpperCase().equals("-RETURNED")) {
-            System.out.println("you want returned");
-
             return ((LoanController) controller).selectReturned();
         } else {
             return controller.select();

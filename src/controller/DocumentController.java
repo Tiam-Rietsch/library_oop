@@ -1,11 +1,9 @@
 package controller;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
-import model.AdherantModel;
 import model.ArticleModel;
 import model.BookModel;
 import model.DefenseReportModel;
@@ -56,6 +54,7 @@ public class DocumentController extends TableController {
 
         // iterate through all the attributes of the model and promt the user for their values
         for (String attr : model.getAllAttributes().sequencedKeySet()) {
+            // retrieve the attributes value (composite, simple or auto generated)
             if (!attributes.get(attr).isEmpty()) {
                 continue;
             } else if (attr.equals("id")) {
@@ -68,10 +67,14 @@ public class DocumentController extends TableController {
                 continue;
             } else if (attr.equals("location")) {
                 value = View.collectCompositeInput("location", new ArrayList<>(Arrays.asList("hall", "shelf")));
+            } else if (attr.equals("location")) {
+                ArrayList<String> components = new ArrayList<>(Arrays.asList("nbr of times", "per (week, month, year)"));
+                value = View.collectCompositeInput("publishing frequency", components);
             } else {
                 value = View.collectUserInput(attr, "", "");
             }
 
+            // check if the value can be inserted
             if (value.equals(".")) {
                 break;
             } else  if (value.replaceAll("\\s", "").equals("")) {

@@ -145,8 +145,16 @@ public abstract class TableModel {
         return result;
     }   
 
+    /**
+     * This method returns all the attributes of a specific model as in the database
+     * @return HashMap of attributes key = attribute name, value = default value
+     */
     public abstract LinkedHashMap<String, String> getAllAttributes();
 
+    /**
+     * 
+     * @return the name of the model database table
+     */
     public abstract String getTableName();
 
 }

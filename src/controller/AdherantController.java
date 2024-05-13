@@ -25,6 +25,7 @@ public class AdherantController extends TableController {
 
         // iterate through all the attributes of the model and promt the user for their values
         for (String attr : model.getAllAttributes().sequencedKeySet()) {
+            // retrieve the attributes value (composite, simple or auto generated)
             if (!attributes.get(attr).isEmpty()) {
                 continue;
             } else if (attr.equals("id")) {
@@ -45,7 +46,7 @@ public class AdherantController extends TableController {
                 value = View.collectUserInput(attr, "", "");
             }
             
-
+            // check if the value can be inserted or has to be removed (in case empty)
             if (value.equals(".")) {
                 break;
             } else  if (value.replaceAll("\\s", "").equals("")) {

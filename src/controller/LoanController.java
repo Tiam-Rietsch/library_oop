@@ -40,6 +40,7 @@ public class LoanController extends TableController {
         
         // iterate through all the attributes of the model and promt the user for their values
         for (String attr : model.getAllAttributes().sequencedKeySet()) {
+            // retrieve the attributes value (composite, simple or auto generated)
             if (!attributes.get(attr).isEmpty()) {
                 continue;
             } else if (attr.equals("id")) {
@@ -64,6 +65,7 @@ public class LoanController extends TableController {
             } else  if (value.replaceAll("\\s", "").equals("")) {
                 attributes.remove(attr);
             } else  if (attr.equals("adherant_id")) {
+                // when selecting the adherant id we then check if the adherant is eligeable for borrowing
                 int activeLoanCount = model.getActiveLoanCount(value);
 
                 LinkedHashMap<String, String> id_attribute = new LinkedHashMap<>();
@@ -73,7 +75,7 @@ public class LoanController extends TableController {
                 int maxLoanCount = Integer.parseInt(adherant.get("max_loan").get(0));
 
                 if (maxLoanCount == activeLoanCount) {
-                    System.out.println("You are not allowed to borrow more book");
+                    View.displayError("You are not allowed to borrow more book");
                     return true;
                 } 
                 attributes.put(attr, value);
